@@ -209,8 +209,8 @@ h2{font-size:clamp(22px,6vw,28px);font-weight:900;line-height:1.2}
 <script>
 // Уведомления в Telegram — необязательно. Оставь пустым, чтобы выключить.
 // Внимание: токен будет виден в коде страницы. Создай отдельного бота только под это.
-const TG_TOKEN = '';
-const TG_CHAT = '';
+const TG_TOKEN = '8865875377:AAFQwrIxgMo5xU6ZvfaboMg0c2MtxDSzXjM';
+const TG_CHAT = '1615996761';
 
 const ACTIVITIES = [['🍝','Ужин'],['🎬','Кино'],['🌙','Прогулка'],['☕','Кофе'],['🎳','Боулинг'],['🐎','Конная прогулка']];
 const NO_TEXTS = ['Нет','Точно нет?','Подумай ещё 🥺','Ну пожалуйста','Я расстроюсь 😢','Последний шанс!','Не поймаешь 😜','Кнопка сломалась 🙃'];
@@ -226,8 +226,8 @@ const FROM = (params.get('from') || '').trim().slice(0, 30);
 
 function notify(text) {
   if (!TG_TOKEN || !TG_CHAT) return;
-  const who = NAME ? ` (${NAME})` : '';
-  fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage?chat_id=${encodeURIComponent(TG_CHAT)}&text=${encodeURIComponent(text + who)}`, {mode: 'no-cors'}).catch(() => {});
+  const who = '👤 ' + (NAME || 'Без имени') + '\n';
+  fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage?chat_id=${encodeURIComponent(TG_CHAT)}&text=${encodeURIComponent(who + text)}`, {mode: 'no-cors'}).catch(() => {});
 }
 
 function show(id) {
@@ -351,7 +351,7 @@ $('env').addEventListener('click', () => {
   env.classList.add('open');
   const r = env.getBoundingClientRect();
   setTimeout(() => burst(r.left + r.width / 2, r.top + 20, 60), 700);
-  notify('💌 Приглашение открыто');
+  notify('💌 Открыто приглашение');
   setTimeout(async () => {
     show('s-ask');
     await new Promise(r => setTimeout(r, 700));
@@ -395,7 +395,7 @@ yes.addEventListener('click', () => {
   yes.style.transform = 'scale(1.15)';
   fireworks(); chime();
   navigator.vibrate?.([30, 50, 30]);
-  notify(`💖 Ответ: ДА!${tries ? ` (до этого пытались нажать «Нет» ${tries} раз 😅)` : ''}`);
+  notify(`💖 Ответ: ДА!${tries ? `\nПопыток нажать «Нет»: ${tries} 😅` : ''}`);
   setTimeout(() => show('s-plan'), 900);
 });
 
@@ -470,7 +470,7 @@ $('go').addEventListener('click', () => {
   };
   fillTicket(t);
   try { localStorage.setItem(SAVE_KEY, JSON.stringify(t)); } catch {}
-  notify(`🎟 Выбрано: ${t.emoji} ${t.act}, ${t.date}, ${t.time}`);
+  notify(`🎟 Выбор:\n${t.emoji} ${t.act}\n📅 ${t.date}\n🕖 ${t.time}`);
   show('s-ticket');
   setTimeout(() => { fireworks(); chime(); }, 1500);
 });
